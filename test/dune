@@ -1,0 +1,12 @@
+(test
+ (name test)
+ (libraries hutch alcotest unix yojson))
+
+; End-to-end test on a throwaway project. Opt-in (dune build @integration): it starts real
+; sandboxes, so it needs bwrap, pasta, nsenter and tmux, and can't run inside a Nix build.
+
+(rule
+ (alias integration)
+ (deps (universe) probe.sh integration.sh %{bin:hutch})
+ (action
+  (run bash %{dep:integration.sh} %{bin:hutch})))
